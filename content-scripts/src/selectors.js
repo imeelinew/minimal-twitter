@@ -16,6 +16,11 @@ selectors.sidebarLinks = {
   messages: `${selectors.leftSidebar} [data-testid="AppTabBar_DirectMessage_Link"]`,
   bookmarks: `${selectors.leftSidebar} a[href*="bookmarks"]`,
   jobs: `${selectors.leftSidebar} a[href*="jobs"]`,
+  creatorStudio: [
+    `${selectors.leftSidebar} a[href*="studio.x.com"][role="link"]`,
+    `${selectors.leftSidebar} a[href*="creator"][role="link"]`,
+    `${selectors.leftSidebar} a[href*="monetization"][role="link"]`,
+  ].join(", "),
   articles: 'a[href="/compose/articles"]',
   topics: `${selectors.leftSidebar} a[href*=topics]`,
   circles: `${selectors.leftSidebar} a[href*=circles]`,

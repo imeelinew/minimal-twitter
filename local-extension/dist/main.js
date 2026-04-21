@@ -21,6 +21,7 @@ const KeyNotificationsButton = "notificationsButton";
 const KeyMessagesButton = "messagesButton";
 const KeyBookmarksButton = "bookmarksButton";
 const KeyJobsButton = "jobsButton";
+const KeyCreatorStudioButton = "creatorStudioButton";
 const KeyArticlesButton = "articles";
 const KeyProfileButton = "profileButton";
 const KeyNavigationButtonsLabels = "navigationButtonsLabels";
@@ -91,6 +92,7 @@ const allSettingsKeys = [
   KeyListsButton,
   KeyBookmarksButton,
   KeyJobsButton,
+  KeyCreatorStudioButton,
   KeyCommunitiesButton,
   KeyArticlesButton,
   KeyTopicsButton,
@@ -152,6 +154,7 @@ const defaultPreferences = {
   [KeyListsButton]: "on",
   [KeyBookmarksButton]: "on",
   [KeyJobsButton]: "off",
+  [KeyCreatorStudioButton]: "off",
   [KeyCommunitiesButton]: "on",
   [KeyArticlesButton]: "off",
   [KeyTopicsButton]: "off",
@@ -294,6 +297,11 @@ selectors.sidebarLinks = {
   messages: `${selectors.leftSidebar} [data-testid="AppTabBar_DirectMessage_Link"]`,
   bookmarks: `${selectors.leftSidebar} a[href*="bookmarks"]`,
   jobs: `${selectors.leftSidebar} a[href*="jobs"]`,
+  creatorStudio: [
+    `${selectors.leftSidebar} a[href*="studio.x.com"][role="link"]`,
+    `${selectors.leftSidebar} a[href*="creator"][role="link"]`,
+    `${selectors.leftSidebar} a[href*="monetization"][role="link"]`,
+  ].join(", "),
   articles: 'a[href="/compose/articles"]',
   topics: `${selectors.leftSidebar} a[href*=topics]`,
   circles: `${selectors.leftSidebar} a[href*=circles]`,
@@ -713,6 +721,7 @@ const changeNotificationsButton = (state) => changeSidebarSetting("notifications
 const changeMessagesButton = (state) => changeSidebarSetting("messages", state);
 const changeBookmarksButton = (state) => changeSidebarSetting("bookmarks", state);
 const changeJobsButton = (state) => changeSidebarSetting("jobs", state);
+const changeCreatorStudioButton = (state) => changeSidebarSetting("creatorStudio", state);
 const changeArticlesButton = (state) => changeSidebarSetting("articles", state);
 const changeVerifiedOrgsButton = (state) => changeSidebarSetting("verifiedOrgs", state);
 const changeProfileButton = (state) => changeSidebarSetting("profile", state);
@@ -1919,6 +1928,7 @@ const staticFeatures = {
     changeMessagesButton(data[KeyMessagesButton]);
     changeBookmarksButton(data[KeyBookmarksButton]);
     changeJobsButton(data[KeyJobsButton]);
+    changeCreatorStudioButton(data[KeyCreatorStudioButton]);
     changeArticlesButton(data[KeyArticlesButton]);
     changeCommunitiesButton(data[KeyCommunitiesButton]);
     changeTopicsButton(data[KeyTopicsButton]);

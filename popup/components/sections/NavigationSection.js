@@ -5,6 +5,7 @@ import {
   KeyArticlesButton,
   KeyBookmarksButton,
   KeyCommunitiesButton,
+  KeyCreatorStudioButton,
   KeyExploreButton,
   KeyGrokButton,
   KeyHideGrokDrawer,
@@ -200,6 +201,16 @@ const Jobs = () => (
   </IconButton>
 );
 
+const CreatorStudio = () => (
+  <IconButton storageKey={KeyCreatorStudioButton} label="创作者工作室">
+    <path
+      className="fill-current"
+      d="M4 21.5c0-2.1.5-4.15 1.44-5.97L2 12.09l1.41-1.42 3.1 3.1a14.9 14.9 0 013.7-3.7l-3.1-3.1L8.53 5.55l3.43 3.44A14.98 14.98 0 0118 7.5h2v2c0 2.14-.45 4.2-1.27 6.05L22 18.82l-1.41 1.41-2.8-2.8A15.1 15.1 0 0113 22H4v-.5zm9.75-2.18a13.04 13.04 0 004.23-9.82 13.03 13.03 0 00-11.3 11H12c.58-.32 1.17-.72 1.75-1.18z"
+    />
+    <path className="fill-current" d="M14.5 14a2.5 2.5 0 110-5 2.5 2.5 0 010 5zm0-2a.5.5 0 100-1 .5.5 0 000 1z" />
+  </IconButton>
+);
+
 const NavigationSection = () => {
   return (
     <section className="flex flex-col gap-y-2">
@@ -216,6 +227,7 @@ const NavigationSection = () => {
             <Lists />
             <Bookmarks />
             <Jobs />
+            <CreatorStudio />
             <Communities />
             <Articles />
             <Topics />
