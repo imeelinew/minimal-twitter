@@ -42,6 +42,7 @@ dist
 bundle/chrome
 bundle/firefox
 .vscode
+.dia-dev-profile
 
 # xcode project
 xcuserdata/

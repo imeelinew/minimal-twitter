@@ -25,34 +25,34 @@ const TimelineSection = () => {
 
   return (
     <section className="flex flex-col gap-y-2">
-      <SectionLabel htmlFor="user-control-timeline">Timeline</SectionLabel>
+      <SectionLabel htmlFor="user-control-timeline">时间线</SectionLabel>
       {mounted ? (
         <ControlsWrapper id="user-control-timeline">
           <TimelineWidthSlider />
           <Separator />
-          <SwitchControl label="Zen Writer Mode" storageKey={KeyWriterMode} />
-          <SwitchControl label="Sticky Header" storageKey={KeyStickyHeader} />
-          <SwitchControl label="Trends on Home Timeline" storageKey={KeyTrendsHomeTimeline} />
-          <SwitchControl label="Recent Media on Profiles" storageKey={KeyRecentMedia} />
+          <SwitchControl label="禅意写作模式" storageKey={KeyWriterMode} />
+          <SwitchControl label="固定顶部栏" storageKey={KeyStickyHeader} />
+          <SwitchControl label="首页时间线趋势" storageKey={KeyTrendsHomeTimeline} />
+          <SwitchControl label="个人主页近期媒体" storageKey={KeyRecentMedia} />
           <Separator />
-          <SectionLabel>Remove Distracting Elements</SectionLabel>
+          <SectionLabel>移除干扰元素</SectionLabel>
           <VanityCheckboxes />
-          <LocalStorageCheckboxControl label="View Count from Tweets" storageKey={KeyHideViewCount} crossedIcon />
-          <LocalStorageCheckboxControl label="Promoted Posts" storageKey={KeyRemovePromotedPosts} crossedIcon />
-          <LocalStorageCheckboxControl label="Topics to Follow Suggestions" storageKey={KeyRemoveTopicsToFollow} crossedIcon />
-          <LocalStorageCheckboxControl label={`Timeline Tabs (For you, Following, lists...)`} storageKey={KeyRemoveTimelineTabs} crossedIcon />
-          <LocalStorageCheckboxControl label="Timeline Borders" storageKey={KeyRemoveTimelineBorders} crossedIcon />
-          <LocalStorageCheckboxControl label="Tweet Borders" storageKey={KeyRemoveTweetBorders} crossedIcon />
+          <LocalStorageCheckboxControl label="推文浏览量" storageKey={KeyHideViewCount} crossedIcon />
+          <LocalStorageCheckboxControl label="推广推文" storageKey={KeyRemovePromotedPosts} crossedIcon />
+          <LocalStorageCheckboxControl label="推荐关注话题" storageKey={KeyRemoveTopicsToFollow} crossedIcon />
+          <LocalStorageCheckboxControl label={`时间线标签页（为你推荐、正在关注、列表...）`} storageKey={KeyRemoveTimelineTabs} crossedIcon />
+          <LocalStorageCheckboxControl label="时间线边框" storageKey={KeyRemoveTimelineBorders} crossedIcon />
+          <LocalStorageCheckboxControl label="推文边框" storageKey={KeyRemoveTweetBorders} crossedIcon />
           <Separator />
-          <LocalStorageCheckboxControl label={`Always use "Following" Tab`} storageKey={KeyFollowingTimeline} />
+          <LocalStorageCheckboxControl label={`始终使用“正在关注”标签页`} storageKey={KeyFollowingTimeline} />
         </ControlsWrapper>
       ) : (
         <ControlsWrapper className="animate-pulse h-[115.5px]" />
       )}
       <p className="pt-1 pb-2 text-xs text-center font-medium leading-5 dark:text-x-accentDark text-x-accent1">
-        View more 𝕏 display settings{" "}
+        查看更多 𝕏 显示设置{" "}
         <a href="https://twitter.com/i/display" target="_blank" rel="noreferrer" className="text-x-premium hover:underline">
-          here
+          这里
         </a>
         .
       </p>

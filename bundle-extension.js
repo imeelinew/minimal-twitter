@@ -17,9 +17,9 @@ const runCommand = (command, yes) =>
   });
 
 let manifest = {
-  name: "Minimal Theme for Twitter / X",
-  short_name: "Minimal Twitter",
-  description: "Refine and declutter the 𝕏/Twitter web experience.",
+  name: "Minimal Twitter Fork",
+  short_name: "MT Fork",
+  description: "Local fork of Minimal Twitter with Eli's imported settings.",
   version: "6.4.1",
   icons: {
     16: "images/MinimalTwitterIcon16.png",
@@ -74,7 +74,7 @@ const MANIFEST_CHROME = {
       32: "images/MinimalTwitterIcon32.png",
       48: "images/MinimalTwitterIcon48.png",
     },
-    default_title: "Minimal Twitter",
+    default_title: "Minimal Twitter Fork",
     default_popup: "index.html",
   },
 };
@@ -115,7 +115,7 @@ const MANIFEST_FIREFOX = {
       32: "images/MinimalTwitterIcon32.png",
       48: "images/MinimalTwitterIcon48.png",
     },
-    default_title: "Minimal Twitter",
+    default_title: "Minimal Twitter Fork",
     default_popup: "index.html",
   },
 };

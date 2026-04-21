@@ -39,26 +39,26 @@ const AdvancedSection = () => {
   return (
     <section className="flex flex-col gap-y-2">
       <SectionLabel htmlFor="user-control-advanced">
-        <span>Advanced</span>
+        <span>高级</span>
         {!showEditor ? (
           <>
             <span> · </span>
             <button onClick={() => setShowEditor(true)} className="text-x-premium">
-              Show CSS Editor
+              显示 CSS 编辑器
             </button>
           </>
         ) : (
           <>
             <span> · </span>
             <button onClick={() => setShowEditor(false)} className="text-x-premium">
-              Hide CSS Editor
+              隐藏 CSS 编辑器
             </button>
           </>
         )}
       </SectionLabel>
       {showEditor && (
         <div className="flex flex-col items-center justify-between dark:bg-x-bgTwoDark bg-x-bgTwo rounded-2xl relative overflow-hidden" id="user-control-advanced">
-          <CodeMirror className="w-full text-sm" theme="dark" value={cssText} placeholder="// Write custom CSS here..." height="300px" extensions={[css()]} onChange={onChange} />
+          <CodeMirror className="w-full text-sm" theme="dark" value={cssText} placeholder="// 在这里编写自定义 CSS..." height="300px" extensions={[css()]} onChange={onChange} />
         </div>
       )}
     </section>

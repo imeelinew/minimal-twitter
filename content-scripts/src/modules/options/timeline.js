@@ -4,77 +4,20 @@ import addStyles, { removeStyles, stylesExist } from "../utilities/addStyles";
 import { getStorage } from "../utilities/storage";
 
 export const changeTimelineWidth = (timelineWidth) => {
-  switch (timelineWidth) {
-    case 600:
-      addStyles(
-        "timelineWidth",
-        `
-        @media only screen and (min-width: 988px) {
-          ${selectors.mainColumn} {
-            width: 600px;
-            max-width: 600px;
-          }
-        }
-        `
-      );
-      break;
+  const width = Number(timelineWidth);
+  if (width < 600 || width > 1000) return;
 
-    case 650:
-      addStyles(
-        "timelineWidth",
-        `
-        @media only screen and (min-width: 988px) {
-          ${selectors.mainColumn} {
-            width: 650px;
-            max-width: 650px;
-          }
-        }
-        `
-      );
-      break;
-
-    case 700:
-      addStyles(
-        "timelineWidth",
-        `
-        @media only screen and (min-width: 988px) {
-          ${selectors.mainColumn} {
-            width: 700px;
-            max-width: 700px;
-          }
-        }
-        `
-      );
-      break;
-
-    case 750:
-      addStyles(
-        "timelineWidth",
-        `
-        @media only screen and (min-width: 988px) {
-          ${selectors.mainColumn} {
-            width: 750px;
-            max-width: 750px;
-          }
-        }
-        `
-      );
-      break;
-
-    case 800:
-      addStyles(
-        "timelineWidth",
-        `
-        @media only screen and (min-width: 988px) {
-          ${selectors.mainColumn} {
-            width: 800px;
-            max-width: 800px;
-          }
-        }
-        `
-      );
-      break;
-  }
+  addStyles(
+    "timelineWidth",
+    `
+    @media only screen and (min-width: 988px) {
+      ${selectors.mainColumn} {
+        width: ${width}px;
+        max-width: ${width}px;
+      }
+    }
+    `
+  );
 };
 
 export const changeTimelineBorders = (timelineBorders) => {
