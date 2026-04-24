@@ -71,7 +71,9 @@ export const dynamicFeatures = {
       changeWriterMode(data[KeyWriterMode]);
     } else {
       changeTimelineTabs(data[KeyRemoveTimelineTabs], data[KeyWriterMode]);
-      changeTimelineComposer(data[KeyHideTimelineComposer], data[KeyWriterMode]);
+      if (data[KeyHideTimelineComposer] === "on") {
+        changeTimelineComposer(data[KeyHideTimelineComposer], data[KeyWriterMode]);
+      }
       changeTrendsHomeTimeline(data[KeyTrendsHomeTimeline], data[KeyWriterMode]);
       changeFollowingTimeline(data[KeyFollowingTimeline]);
     }
