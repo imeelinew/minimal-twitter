@@ -1,4 +1,4 @@
-import { KeyExtensionStatus } from "../../storage-keys";
+import { allSettingsKeys, KeyExtensionStatus } from "../../storage-keys";
 import { applyStaticFeatures } from "./modules/features/static";
 import { initializeExtension } from "./modules/initialize";
 import constructNewData from "./modules/utilities/constructNewData";
@@ -26,7 +26,8 @@ chrome.storage.onChanged.addListener(async (changes) => {
   const status = await getStorage(KeyExtensionStatus);
   if (status === "off") return;
 
-  const newData = constructNewData(changes);
+  const currentData = await getStorage(allSettingsKeys);
+  const newData = { ...currentData, ...constructNewData(changes) };
   applyStaticFeatures(newData);
 });
 

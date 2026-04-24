@@ -34,6 +34,22 @@ export const changeMessagesButton = (state) => changeSidebarSetting("messages", 
 export const changeBookmarksButton = (state) => changeSidebarSetting("bookmarks", state);
 export const changeJobsButton = (state) => changeSidebarSetting("jobs", state);
 export const changeCreatorStudioButton = (state) => changeSidebarSetting("creatorStudio", state);
+export const changeAccountSwitcherButton = (state) => {
+  switch (state) {
+    case "off":
+      addStyles(
+        "accountSwitcher",
+        `${selectors.accountSwitcherButton} {
+          display: none;
+        }`
+      );
+      break;
+
+    case "on":
+      removeStyles("accountSwitcher");
+      break;
+  }
+};
 export const changeArticlesButton = (state) => changeSidebarSetting("articles", state);
 export const changeVerifiedOrgsButton = (state) => changeSidebarSetting("verifiedOrgs", state);
 export const changeProfileButton = (state) => changeSidebarSetting("profile", state);
@@ -224,6 +240,25 @@ export const changeNavigationCenter = (navigationCenter) => {
       removeStyles("navigationCenter");
       break;
   }
+};
+
+export const changeNavigationHorizontalOffset = (offset) => {
+  const horizontalOffset = Math.min(Math.max(Number(offset) || 0, -120), 120);
+
+  addStyles(
+    "navigationHorizontalOffset",
+    `
+    @media only screen and (min-width: 1000px) {
+      ${selectors.leftSidebar} > div > div > div {
+        align-items: center;
+        transform: translateX(${horizontalOffset}px);
+      }
+      ${selectors.leftSidebarLinks} {
+        align-items: center;
+      }
+    }
+    `
+  );
 };
 
 export const hideGrokDrawer = (state) => {

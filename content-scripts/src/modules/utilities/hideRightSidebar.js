@@ -17,10 +17,15 @@ export default async function hideRightSidebar() {
       "hide-sidebar",
       `${selectors.rightSidebar} {
         visibility: hidden;
-        width: 0;
+        width: 0 !important;
+        min-width: 0 !important;
+        max-width: 0 !important;
+        flex-basis: 0 !important;
         margin: 0;
         padding: 0;
-        z-index: 1;
+        overflow: hidden;
+        pointer-events: none;
+        z-index: 0;
       }`
     );
   }

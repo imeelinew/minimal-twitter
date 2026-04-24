@@ -49,11 +49,13 @@ const getMultipleStorageKeys = (keysArray) => {
   - 1 min = 60000 ms
   - 60000 ms / 120 operations = 500 ms/operation
 --*/
-export const setStorage = throttle(async (kv) => {
+export const setStorageImmediately = async (kv) => {
   const promise = new Promise((resolve, _reject) => {
     chrome?.storage?.local.set(kv, () => {
       return resolve(kv);
     });
   });
   return promise;
-}, 500);
+};
+
+export const setStorage = throttle(setStorageImmediately, 500);

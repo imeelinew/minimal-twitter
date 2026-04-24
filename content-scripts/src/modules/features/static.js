@@ -6,6 +6,7 @@
  */
 
 import {
+  KeyAccountSwitcherButton,
   KeyArticlesButton,
   KeyBookmarksButton,
   KeyCommunitiesButton,
@@ -16,6 +17,7 @@ import {
   KeyFollowingTimeline,
   KeyGrokButton,
   KeyHideGrokDrawer,
+  KeyHideTimelineComposer,
   KeyHideViewCount,
   KeyHomeButton,
   KeyInterFont,
@@ -25,6 +27,7 @@ import {
   KeyMessagesButton,
   KeyNavigationButtonsLabels,
   KeyNavigationCenter,
+  KeyNavigationHorizontalOffset,
   KeyNotificationsButton,
   KeyProfileButton,
   KeyRecentMedia,
@@ -57,6 +60,7 @@ import changeHideViewCounts from "../options/hideViewCount";
 import { changeHideSearchBar, changeInterFont, changeTitleNotifications, changeTransparentSearchBar, changeTweetButton } from "../options/interface";
 import {
   changeAnalyticsButton,
+  changeAccountSwitcherButton,
   changeArticlesButton,
   changeBookmarksButton,
   changeCommunitiesButton,
@@ -69,6 +73,7 @@ import {
   changeMessagesButton,
   changeNavigationButtonsLabels,
   changeNavigationCenter,
+  changeNavigationHorizontalOffset,
   changeNotificationsButton,
   changeProfileButton,
   changeSidebarLogo,
@@ -80,6 +85,7 @@ import {
 } from "../options/navigation";
 import {
   changeFollowingTimeline,
+  changeTimelineComposer,
   changePromotedPosts,
   changeRecentMedia,
   changeStickyHeader,
@@ -104,6 +110,7 @@ export const staticFeatures = {
     changeHideViewCounts(data[KeyHideViewCount]);
     changeRecentMedia(data[KeyRecentMedia]);
     changeTrendsHomeTimeline(data[KeyTrendsHomeTimeline], data[KeyWriterMode]);
+    changeTimelineComposer(data[KeyHideTimelineComposer], data[KeyWriterMode]);
     changePromotedPosts(data[KeyRemovePromotedPosts]);
     changeTopicsToFollow(data[KeyRemoveTopicsToFollow]);
     changeTimelineTabs(data[KeyRemoveTimelineTabs], data[KeyWriterMode]);
@@ -117,6 +124,7 @@ export const staticFeatures = {
     changeSidebarLogo(data[KeySidebarLogo]);
     changeNavigationButtonsLabels(data[KeyNavigationButtonsLabels]);
     changeNavigationCenter(data[KeyNavigationCenter]);
+    changeNavigationHorizontalOffset(data[KeyNavigationHorizontalOffset]);
     changeUnreadCountBadge(data[KeyUnreadCountBadge]);
     hideGrokDrawer(data[KeyHideGrokDrawer]);
   },
@@ -135,6 +143,7 @@ export const staticFeatures = {
     changeBookmarksButton(data[KeyBookmarksButton]);
     changeJobsButton(data[KeyJobsButton]);
     changeCreatorStudioButton(data[KeyCreatorStudioButton]);
+    changeAccountSwitcherButton(data[KeyAccountSwitcherButton]);
     changeArticlesButton(data[KeyArticlesButton]);
     changeCommunitiesButton(data[KeyCommunitiesButton]);
     changeTopicsButton(data[KeyTopicsButton]);

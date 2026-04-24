@@ -1,5 +1,6 @@
 import {
   KeyFollowingTimeline,
+  KeyHideTimelineComposer,
   KeyHideViewCount,
   KeyRecentMedia,
   KeyRemovePromotedPosts,
@@ -41,6 +42,7 @@ const TimelineSection = () => {
           <LocalStorageCheckboxControl label="推广推文" storageKey={KeyRemovePromotedPosts} crossedIcon />
           <LocalStorageCheckboxControl label="推荐关注话题" storageKey={KeyRemoveTopicsToFollow} crossedIcon />
           <LocalStorageCheckboxControl label={`时间线标签页（为你推荐、正在关注、列表...）`} storageKey={KeyRemoveTimelineTabs} crossedIcon />
+          <LocalStorageCheckboxControl label="编写发送推文栏" storageKey={KeyHideTimelineComposer} crossedIcon />
           <LocalStorageCheckboxControl label="时间线边框" storageKey={KeyRemoveTimelineBorders} crossedIcon />
           <LocalStorageCheckboxControl label="推文边框" storageKey={KeyRemoveTweetBorders} crossedIcon />
           <Separator />

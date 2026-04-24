@@ -22,10 +22,12 @@ export const KeyMessagesButton = "messagesButton";
 export const KeyBookmarksButton = "bookmarksButton";
 export const KeyJobsButton = "jobsButton";
 export const KeyCreatorStudioButton = "creatorStudioButton";
+export const KeyAccountSwitcherButton = "accountSwitcherButton";
 export const KeyArticlesButton = "articles";
 export const KeyProfileButton = "profileButton";
 export const KeyNavigationButtonsLabels = "navigationButtonsLabels";
 export const KeyNavigationCenter = "navigationCenter";
+export const KeyNavigationHorizontalOffset = "navigationHorizontalOffset";
 export const KeyUnreadCountBadge = "unreadCountBadge";
 export const KeyAllVanity = "allVanity";
 export const KeyReplyCount = "replyCount";
@@ -37,6 +39,7 @@ export const KeySearchBar = "searchBar";
 export const KeyTransparentSearch = "transparentSearch";
 export const KeyRemovePromotedPosts = "removePromotedPosts";
 export const KeyRemoveTopicsToFollow = "removeTopicsToFollow";
+export const KeyHideTimelineComposer = "hideTimelineComposer";
 export const KeyRecentMedia = "recentMedia";
 export const KeyTypefullyEnhancementsButtons = "typefullyEnhancementsButtons";
 export const KeyInterFont = "interFont";
@@ -61,6 +64,7 @@ export const allSettingsKeys = [
   KeyTrendsHomeTimeline,
   KeyRemovePromotedPosts,
   KeyRemoveTopicsToFollow,
+  KeyHideTimelineComposer,
   KeyRemoveTimelineTabs,
   KeyTypefullyEnhancementsButtons,
   KeyFollowCount,
@@ -72,6 +76,7 @@ export const allSettingsKeys = [
   KeySidebarLogo,
   KeyNavigationButtonsLabels,
   KeyNavigationCenter,
+  KeyNavigationHorizontalOffset,
   KeyUnreadCountBadge,
   KeyHideGrokDrawer,
 
@@ -93,6 +98,7 @@ export const allSettingsKeys = [
   KeyBookmarksButton,
   KeyJobsButton,
   KeyCreatorStudioButton,
+  KeyAccountSwitcherButton,
   KeyCommunitiesButton,
   KeyArticlesButton,
   KeyTopicsButton,
@@ -112,7 +118,7 @@ export const defaultPreferences = {
   [KeyExtensionStatus]: "on",
 
   // Timeline Features
-  [KeyTimelineWidth]: 700,
+  [KeyTimelineWidth]: 800,
   [KeyRemoveTimelineBorders]: "off",
   [KeyRemoveTweetBorders]: "off",
   [KeyStickyHeader]: "on",
@@ -123,6 +129,7 @@ export const defaultPreferences = {
   [KeyTrendsHomeTimeline]: "off",
   [KeyRemovePromotedPosts]: "on",
   [KeyRemoveTopicsToFollow]: "on",
+  [KeyHideTimelineComposer]: "off",
   [KeyRemoveTimelineTabs]: "off",
   [KeyTypefullyEnhancementsButtons]: "on",
   [KeyFollowCount]: "on",
@@ -134,6 +141,7 @@ export const defaultPreferences = {
   [KeySidebarLogo]: "off",
   [KeyNavigationButtonsLabels]: "never",
   [KeyNavigationCenter]: "off",
+  [KeyNavigationHorizontalOffset]: 0,
   [KeyUnreadCountBadge]: "off",
   [KeyHideGrokDrawer]: "on",
 
@@ -155,6 +163,7 @@ export const defaultPreferences = {
   [KeyBookmarksButton]: "on",
   [KeyJobsButton]: "off",
   [KeyCreatorStudioButton]: "off",
+  [KeyAccountSwitcherButton]: "off",
   [KeyCommunitiesButton]: "on",
   [KeyArticlesButton]: "off",
   [KeyTopicsButton]: "off",

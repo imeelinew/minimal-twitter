@@ -3,6 +3,8 @@ import selectors from "../../selectors";
 import addStyles, { removeStyles, stylesExist } from "../utilities/addStyles";
 import { getStorage } from "../utilities/storage";
 
+const isHomeTimelinePath = () => window.location.pathname === "/" || window.location.pathname.startsWith("/home");
+
 export const changeTimelineWidth = (timelineWidth) => {
   const width = Number(timelineWidth);
   if (width < 600 || width > 1000) return;
@@ -126,7 +128,7 @@ export const changeTopicsToFollow = (removeTopicsToFollow) => {
 };
 
 export const changeTimelineTabs = (removeTimelineTabs, writerMode) => {
-  if (writerMode === "on" || window.location.pathname.includes("compose/tweet") || !window.location.pathname.includes("/home") || !window.location.pathname === "/") {
+  if (writerMode === "on" || window.location.pathname.includes("compose/tweet") || !isHomeTimelinePath()) {
     removeStyles("removeTimelineTabs");
     return;
   }
@@ -142,12 +144,159 @@ export const changeTimelineTabs = (removeTimelineTabs, writerMode) => {
       addStyles(
         "removeTimelineTabs",
         `
-        ${selectors.timelineTabs} {
-          display: none;
+        ${selectors.timelineTabs},
+        ${selectors.mainColumn} nav[role="navigation"]:has(${selectors.timelineTablist}) {
+          display: none !important;
         }
         `
       );
       break;
+  }
+};
+
+const removeTimelineComposerClasses = () => {
+  document
+    .querySelectorAll(
+      ".mt-hidden-timeline-composer, .mt-hidden-timeline-composer-wrapper, .mt-hidden-timeline-composer-spacer"
+    )
+    .forEach((element) => {
+      element.classList.remove(
+        "mt-hidden-timeline-composer",
+        "mt-hidden-timeline-composer-wrapper",
+        "mt-hidden-timeline-composer-spacer"
+      );
+    });
+};
+
+const findTimelineComposerElement = () => {
+  const composerCell = document.querySelector(
+    `${selectors.mainColumn} [data-testid="cellInnerDiv"]:has([data-testid^="tweetTextarea_"]):has([data-testid="tweetButtonInline"])`
+  );
+
+  if (composerCell) return composerCell;
+
+  const textarea = document.querySelector(`${selectors.mainColumn} [data-testid^="tweetTextarea_"]`);
+  const inlineTweetButton = document.querySelector(`${selectors.mainColumn} [data-testid="tweetButtonInline"]`);
+
+  if (!textarea || !inlineTweetButton) return null;
+
+  const textareaCell = textarea.closest('[data-testid="cellInnerDiv"]');
+  if (textareaCell) return textareaCell;
+
+  const avatarSelector = '[data-testid^="UserAvatar-Container"]';
+  let ancestor = textarea.parentElement;
+
+  while (ancestor && ancestor !== document.body && !ancestor.matches(selectors.mainColumn)) {
+    if (ancestor.contains(inlineTweetButton) && ancestor.querySelector(avatarSelector)) {
+      return ancestor;
+    }
+
+    ancestor = ancestor.parentElement;
+  }
+
+  ancestor = textarea.parentElement;
+
+  while (ancestor && ancestor !== document.body && !ancestor.matches(selectors.mainColumn)) {
+    if (ancestor.contains(inlineTweetButton)) {
+      let candidate = ancestor;
+
+      while (candidate.parentElement && !candidate.parentElement.matches(selectors.mainColumn)) {
+        const parent = candidate.parentElement;
+
+        if (parent.querySelector(selectors.timelineTablist) || parent.querySelector(selectors.tweet)) break;
+        if (parent.querySelectorAll('[data-testid^="tweetTextarea_"]').length > 1) break;
+        if (!parent.contains(inlineTweetButton)) break;
+
+        candidate = parent;
+      }
+
+      return candidate;
+    }
+
+    ancestor = ancestor.parentElement;
+  }
+
+  return null;
+};
+
+const markTimelineComposerElement = () => {
+  const composer = findTimelineComposerElement();
+  if (!composer) return;
+
+  const composerCell = composer.closest('[data-testid="cellInnerDiv"]') || composer;
+  composerCell.classList.add("mt-hidden-timeline-composer");
+
+  const markAdjacentSpacers = (anchor) => {
+    let sibling = anchor.nextElementSibling;
+
+    for (let i = 0; sibling && i < 3; i += 1) {
+      const isSeparator = sibling.getAttribute("role") === "separator";
+      const isTinySpacer = sibling.childElementCount === 0 || sibling.getBoundingClientRect().height <= 16;
+      const isEmptyTimelineCell =
+        sibling.matches?.('[data-testid="cellInnerDiv"]') &&
+        !sibling.querySelector(selectors.tweet) &&
+        !sibling.querySelector(selectors.timelineTablist) &&
+        !sibling.querySelector('[data-testid^="tweetTextarea_"]');
+
+      if (!isSeparator && !isTinySpacer && !isEmptyTimelineCell) break;
+
+      sibling.classList.add("mt-hidden-timeline-composer-spacer");
+      sibling = sibling.nextElementSibling;
+    }
+  };
+
+  markAdjacentSpacers(composerCell);
+
+  let wrapper = composerCell.parentElement;
+  while (wrapper && wrapper !== document.body && !wrapper.matches(selectors.mainColumn)) {
+    if (wrapper.querySelector(selectors.tweet) || wrapper.querySelector(selectors.timelineTablist)) break;
+
+    if (wrapper.querySelector('[data-testid^="tweetTextarea_"]') || wrapper.querySelector('[data-testid="tweetButtonInline"]')) {
+      wrapper.classList.add("mt-hidden-timeline-composer-wrapper");
+    }
+
+    markAdjacentSpacers(wrapper);
+    wrapper = wrapper.parentElement;
+  }
+};
+
+export const changeTimelineComposer = (hideTimelineComposer, writerMode) => {
+  if (writerMode === "on" || window.location.pathname.includes("compose/tweet") || !isHomeTimelinePath()) {
+    removeTimelineComposerClasses();
+    removeStyles("hideTimelineComposer");
+    return;
+  }
+
+  switch (hideTimelineComposer) {
+    case "off":
+      removeTimelineComposerClasses();
+      removeStyles("hideTimelineComposer");
+      break;
+
+    case "on": {
+      addStyles(
+        "hideTimelineComposer",
+        `
+        ${selectors.mainColumn} [data-testid="cellInnerDiv"]:has([data-testid^="tweetTextarea_"]),
+        ${selectors.mainColumn} [data-testid="cellInnerDiv"]:has([data-testid="tweetButtonInline"]),
+        ${selectors.mainColumn} [data-testid="cellInnerDiv"]:not(:has(${selectors.tweet})):not(:has(${selectors.timelineTablist})):not(:has([data-testid^="tweetTextarea_"])):has(+ [data-testid="cellInnerDiv"] ${selectors.tweet}),
+        .mt-hidden-timeline-composer,
+        .mt-hidden-timeline-composer-wrapper,
+        .mt-hidden-timeline-composer-spacer {
+          display: none !important;
+          height: 0 !important;
+          min-height: 0 !important;
+          margin: 0 !important;
+          padding: 0 !important;
+          border: 0 !important;
+          overflow: hidden !important;
+        }
+        `
+      );
+
+      markTimelineComposerElement();
+      break;
+    }
   }
 };
 
@@ -184,6 +333,7 @@ export const changeRecentMedia = async (recentMedia) => {
                 right: 16px;
                 top: 70px;
                 width: 300px;
+                pointer-events: auto;
               }
               
               [data-testid="primaryColumn"] {
@@ -252,6 +402,7 @@ export const changeTrendsHomeTimeline = (trendsHomeTimeline, writerMode) => {
               animation-fill-mode: forwards;
               animation-delay: 500ms;
               margin-top: 4px;
+              pointer-events: auto;
             }
 
             [data-testid="primaryColumn"] {

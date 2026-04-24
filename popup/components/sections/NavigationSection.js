@@ -2,6 +2,7 @@ import * as TogglePrimitive from "@radix-ui/react-toggle";
 import { styled } from "@stitches/react";
 import startCase from "lodash.startcase";
 import {
+  KeyAccountSwitcherButton,
   KeyArticlesButton,
   KeyBookmarksButton,
   KeyCommunitiesButton,
@@ -28,6 +29,7 @@ import SectionLabel from "../ui/SectionLabel";
 import { SegmentedControl } from "../ui/SegmentedControl";
 
 import useStorageKeyState from "../../utilities/useStorageKeyState";
+import NavigationHorizontalOffsetControl from "../controls/NavigationHorizontalOffsetControl";
 import Separator from "../ui/Separator";
 import SwitchControl from "../ui/SwitchControl";
 
@@ -259,7 +261,9 @@ const NavigationSection = () => {
               />
             </div>
             <SwitchControl label="垂直居中" storageKey={KeyNavigationCenter} />
+            <NavigationHorizontalOffsetControl />
             <SwitchControl label="未读数量徽标" storageKey={KeyUnreadCountBadge} />
+            <SwitchControl label="用户信息区" storageKey={KeyAccountSwitcherButton} />
             <SwitchControl label="隐藏 Grok 抽屉按钮" storageKey={KeyHideGrokDrawer} />
           </div>
         </form>

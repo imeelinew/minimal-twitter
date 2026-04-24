@@ -22,10 +22,12 @@ const KeyMessagesButton = "messagesButton";
 const KeyBookmarksButton = "bookmarksButton";
 const KeyJobsButton = "jobsButton";
 const KeyCreatorStudioButton = "creatorStudioButton";
+const KeyAccountSwitcherButton = "accountSwitcherButton";
 const KeyArticlesButton = "articles";
 const KeyProfileButton = "profileButton";
 const KeyNavigationButtonsLabels = "navigationButtonsLabels";
 const KeyNavigationCenter = "navigationCenter";
+const KeyNavigationHorizontalOffset = "navigationHorizontalOffset";
 const KeyUnreadCountBadge = "unreadCountBadge";
 const KeyAllVanity = "allVanity";
 const KeyReplyCount = "replyCount";
@@ -37,6 +39,7 @@ const KeySearchBar = "searchBar";
 const KeyTransparentSearch = "transparentSearch";
 const KeyRemovePromotedPosts = "removePromotedPosts";
 const KeyRemoveTopicsToFollow = "removeTopicsToFollow";
+const KeyHideTimelineComposer = "hideTimelineComposer";
 const KeyRecentMedia = "recentMedia";
 const KeyTypefullyEnhancementsButtons = "typefullyEnhancementsButtons";
 const KeyInterFont = "interFont";
@@ -61,6 +64,7 @@ const allSettingsKeys = [
   KeyTrendsHomeTimeline,
   KeyRemovePromotedPosts,
   KeyRemoveTopicsToFollow,
+  KeyHideTimelineComposer,
   KeyRemoveTimelineTabs,
   KeyTypefullyEnhancementsButtons,
   KeyFollowCount,
@@ -72,6 +76,7 @@ const allSettingsKeys = [
   KeySidebarLogo,
   KeyNavigationButtonsLabels,
   KeyNavigationCenter,
+  KeyNavigationHorizontalOffset,
   KeyUnreadCountBadge,
   KeyHideGrokDrawer,
 
@@ -93,6 +98,7 @@ const allSettingsKeys = [
   KeyBookmarksButton,
   KeyJobsButton,
   KeyCreatorStudioButton,
+  KeyAccountSwitcherButton,
   KeyCommunitiesButton,
   KeyArticlesButton,
   KeyTopicsButton,
@@ -112,7 +118,7 @@ const defaultPreferences = {
   [KeyExtensionStatus]: "on",
 
   // Timeline Features
-  [KeyTimelineWidth]: 700,
+  [KeyTimelineWidth]: 800,
   [KeyRemoveTimelineBorders]: "off",
   [KeyRemoveTweetBorders]: "off",
   [KeyStickyHeader]: "on",
@@ -123,6 +129,7 @@ const defaultPreferences = {
   [KeyTrendsHomeTimeline]: "off",
   [KeyRemovePromotedPosts]: "on",
   [KeyRemoveTopicsToFollow]: "on",
+  [KeyHideTimelineComposer]: "off",
   [KeyRemoveTimelineTabs]: "off",
   [KeyTypefullyEnhancementsButtons]: "on",
   [KeyFollowCount]: "on",
@@ -134,6 +141,7 @@ const defaultPreferences = {
   [KeySidebarLogo]: "off",
   [KeyNavigationButtonsLabels]: "never",
   [KeyNavigationCenter]: "off",
+  [KeyNavigationHorizontalOffset]: 0,
   [KeyUnreadCountBadge]: "off",
   [KeyHideGrokDrawer]: "on",
 
@@ -155,6 +163,7 @@ const defaultPreferences = {
   [KeyBookmarksButton]: "on",
   [KeyJobsButton]: "off",
   [KeyCreatorStudioButton]: "off",
+  [KeyAccountSwitcherButton]: "off",
   [KeyCommunitiesButton]: "on",
   [KeyArticlesButton]: "off",
   [KeyTopicsButton]: "off",
@@ -722,6 +731,22 @@ const changeMessagesButton = (state) => changeSidebarSetting("messages", state);
 const changeBookmarksButton = (state) => changeSidebarSetting("bookmarks", state);
 const changeJobsButton = (state) => changeSidebarSetting("jobs", state);
 const changeCreatorStudioButton = (state) => changeSidebarSetting("creatorStudio", state);
+const changeAccountSwitcherButton = (state) => {
+  switch (state) {
+    case "off":
+      addStyles(
+        "accountSwitcher",
+        `${selectors.accountSwitcherButton} {
+          display: none;
+        }`
+      );
+      break;
+
+    case "on":
+      removeStyles("accountSwitcher");
+      break;
+  }
+};
 const changeArticlesButton = (state) => changeSidebarSetting("articles", state);
 const changeVerifiedOrgsButton = (state) => changeSidebarSetting("verifiedOrgs", state);
 const changeProfileButton = (state) => changeSidebarSetting("profile", state);
@@ -914,6 +939,25 @@ const changeNavigationCenter = (navigationCenter) => {
   }
 };
 
+const changeNavigationHorizontalOffset = (offset) => {
+  const horizontalOffset = Math.min(Math.max(Number(offset) || 0, -120), 120);
+
+  addStyles(
+    "navigationHorizontalOffset",
+    `
+    @media only screen and (min-width: 1000px) {
+      ${selectors.leftSidebar} > div > div > div {
+        align-items: center;
+        transform: translateX(${horizontalOffset}px);
+      }
+      ${selectors.leftSidebarLinks} {
+        align-items: center;
+      }
+    }
+    `
+  );
+};
+
 const hideGrokDrawer = (state) => {
   switch (state) {
     case "on":
@@ -931,6 +975,8 @@ const hideGrokDrawer = (state) => {
       break;
   }
 };
+
+const isHomeTimelinePath = () => window.location.pathname === "/" || window.location.pathname.startsWith("/home");
 
 const changeTimelineWidth = (timelineWidth) => {
   const width = Number(timelineWidth);
@@ -1055,7 +1101,7 @@ const changeTopicsToFollow = (removeTopicsToFollow) => {
 };
 
 const changeTimelineTabs = (removeTimelineTabs, writerMode) => {
-  if (writerMode === "on" || window.location.pathname.includes("compose/tweet") || !window.location.pathname.includes("/home") || !window.location.pathname === "/") {
+  if (writerMode === "on" || window.location.pathname.includes("compose/tweet") || !isHomeTimelinePath()) {
     removeStyles("removeTimelineTabs");
     return;
   }
@@ -1071,12 +1117,159 @@ const changeTimelineTabs = (removeTimelineTabs, writerMode) => {
       addStyles(
         "removeTimelineTabs",
         `
-        ${selectors.timelineTabs} {
-          display: none;
+        ${selectors.timelineTabs},
+        ${selectors.mainColumn} nav[role="navigation"]:has(${selectors.timelineTablist}) {
+          display: none !important;
         }
         `
       );
       break;
+  }
+};
+
+const removeTimelineComposerClasses = () => {
+  document
+    .querySelectorAll(
+      ".mt-hidden-timeline-composer, .mt-hidden-timeline-composer-wrapper, .mt-hidden-timeline-composer-spacer"
+    )
+    .forEach((element) => {
+      element.classList.remove(
+        "mt-hidden-timeline-composer",
+        "mt-hidden-timeline-composer-wrapper",
+        "mt-hidden-timeline-composer-spacer"
+      );
+    });
+};
+
+const findTimelineComposerElement = () => {
+  const composerCell = document.querySelector(
+    `${selectors.mainColumn} [data-testid="cellInnerDiv"]:has([data-testid^="tweetTextarea_"]):has([data-testid="tweetButtonInline"])`
+  );
+
+  if (composerCell) return composerCell;
+
+  const textarea = document.querySelector(`${selectors.mainColumn} [data-testid^="tweetTextarea_"]`);
+  const inlineTweetButton = document.querySelector(`${selectors.mainColumn} [data-testid="tweetButtonInline"]`);
+
+  if (!textarea || !inlineTweetButton) return null;
+
+  const textareaCell = textarea.closest('[data-testid="cellInnerDiv"]');
+  if (textareaCell) return textareaCell;
+
+  const avatarSelector = '[data-testid^="UserAvatar-Container"]';
+  let ancestor = textarea.parentElement;
+
+  while (ancestor && ancestor !== document.body && !ancestor.matches(selectors.mainColumn)) {
+    if (ancestor.contains(inlineTweetButton) && ancestor.querySelector(avatarSelector)) {
+      return ancestor;
+    }
+
+    ancestor = ancestor.parentElement;
+  }
+
+  ancestor = textarea.parentElement;
+
+  while (ancestor && ancestor !== document.body && !ancestor.matches(selectors.mainColumn)) {
+    if (ancestor.contains(inlineTweetButton)) {
+      let candidate = ancestor;
+
+      while (candidate.parentElement && !candidate.parentElement.matches(selectors.mainColumn)) {
+        const parent = candidate.parentElement;
+
+        if (parent.querySelector(selectors.timelineTablist) || parent.querySelector(selectors.tweet)) break;
+        if (parent.querySelectorAll('[data-testid^="tweetTextarea_"]').length > 1) break;
+        if (!parent.contains(inlineTweetButton)) break;
+
+        candidate = parent;
+      }
+
+      return candidate;
+    }
+
+    ancestor = ancestor.parentElement;
+  }
+
+  return null;
+};
+
+const markTimelineComposerElement = () => {
+  const composer = findTimelineComposerElement();
+  if (!composer) return;
+
+  const composerCell = composer.closest('[data-testid="cellInnerDiv"]') || composer;
+  composerCell.classList.add("mt-hidden-timeline-composer");
+
+  const markAdjacentSpacers = (anchor) => {
+    let sibling = anchor.nextElementSibling;
+
+    for (let i = 0; sibling && i < 3; i += 1) {
+      const isSeparator = sibling.getAttribute("role") === "separator";
+      const isTinySpacer = sibling.childElementCount === 0 || sibling.getBoundingClientRect().height <= 16;
+      const isEmptyTimelineCell =
+        sibling.matches?.('[data-testid="cellInnerDiv"]') &&
+        !sibling.querySelector(selectors.tweet) &&
+        !sibling.querySelector(selectors.timelineTablist) &&
+        !sibling.querySelector('[data-testid^="tweetTextarea_"]');
+
+      if (!isSeparator && !isTinySpacer && !isEmptyTimelineCell) break;
+
+      sibling.classList.add("mt-hidden-timeline-composer-spacer");
+      sibling = sibling.nextElementSibling;
+    }
+  };
+
+  markAdjacentSpacers(composerCell);
+
+  let wrapper = composerCell.parentElement;
+  while (wrapper && wrapper !== document.body && !wrapper.matches(selectors.mainColumn)) {
+    if (wrapper.querySelector(selectors.tweet) || wrapper.querySelector(selectors.timelineTablist)) break;
+
+    if (wrapper.querySelector('[data-testid^="tweetTextarea_"]') || wrapper.querySelector('[data-testid="tweetButtonInline"]')) {
+      wrapper.classList.add("mt-hidden-timeline-composer-wrapper");
+    }
+
+    markAdjacentSpacers(wrapper);
+    wrapper = wrapper.parentElement;
+  }
+};
+
+const changeTimelineComposer = (hideTimelineComposer, writerMode) => {
+  if (writerMode === "on" || window.location.pathname.includes("compose/tweet") || !isHomeTimelinePath()) {
+    removeTimelineComposerClasses();
+    removeStyles("hideTimelineComposer");
+    return;
+  }
+
+  switch (hideTimelineComposer) {
+    case "off":
+      removeTimelineComposerClasses();
+      removeStyles("hideTimelineComposer");
+      break;
+
+    case "on": {
+      addStyles(
+        "hideTimelineComposer",
+        `
+        ${selectors.mainColumn} [data-testid="cellInnerDiv"]:has([data-testid^="tweetTextarea_"]),
+        ${selectors.mainColumn} [data-testid="cellInnerDiv"]:has([data-testid="tweetButtonInline"]),
+        ${selectors.mainColumn} [data-testid="cellInnerDiv"]:not(:has(${selectors.tweet})):not(:has(${selectors.timelineTablist})):not(:has([data-testid^="tweetTextarea_"])):has(+ [data-testid="cellInnerDiv"] ${selectors.tweet}),
+        .mt-hidden-timeline-composer,
+        .mt-hidden-timeline-composer-wrapper,
+        .mt-hidden-timeline-composer-spacer {
+          display: none !important;
+          height: 0 !important;
+          min-height: 0 !important;
+          margin: 0 !important;
+          padding: 0 !important;
+          border: 0 !important;
+          overflow: hidden !important;
+        }
+        `
+      );
+
+      markTimelineComposerElement();
+      break;
+    }
   }
 };
 
@@ -1113,6 +1306,7 @@ const changeRecentMedia = async (recentMedia) => {
                 right: 16px;
                 top: 70px;
                 width: 300px;
+                pointer-events: auto;
               }
               
               [data-testid="primaryColumn"] {
@@ -1181,6 +1375,7 @@ const changeTrendsHomeTimeline = (trendsHomeTimeline, writerMode) => {
               animation-fill-mode: forwards;
               animation-delay: 500ms;
               margin-top: 4px;
+              pointer-events: auto;
             }
 
             [data-testid="primaryColumn"] {
@@ -1898,6 +2093,7 @@ const staticFeatures = {
     changeHideViewCounts(data[KeyHideViewCount]);
     changeRecentMedia(data[KeyRecentMedia]);
     changeTrendsHomeTimeline(data[KeyTrendsHomeTimeline], data[KeyWriterMode]);
+    changeTimelineComposer(data[KeyHideTimelineComposer], data[KeyWriterMode]);
     changePromotedPosts(data[KeyRemovePromotedPosts]);
     changeTopicsToFollow(data[KeyRemoveTopicsToFollow]);
     changeTimelineTabs(data[KeyRemoveTimelineTabs], data[KeyWriterMode]);
@@ -1911,6 +2107,7 @@ const staticFeatures = {
     changeSidebarLogo(data[KeySidebarLogo]);
     changeNavigationButtonsLabels(data[KeyNavigationButtonsLabels]);
     changeNavigationCenter(data[KeyNavigationCenter]);
+    changeNavigationHorizontalOffset(data[KeyNavigationHorizontalOffset]);
     changeUnreadCountBadge(data[KeyUnreadCountBadge]);
     hideGrokDrawer(data[KeyHideGrokDrawer]);
   },
@@ -1929,6 +2126,7 @@ const staticFeatures = {
     changeBookmarksButton(data[KeyBookmarksButton]);
     changeJobsButton(data[KeyJobsButton]);
     changeCreatorStudioButton(data[KeyCreatorStudioButton]);
+    changeAccountSwitcherButton(data[KeyAccountSwitcherButton]);
     changeArticlesButton(data[KeyArticlesButton]);
     changeCommunitiesButton(data[KeyCommunitiesButton]);
     changeTopicsButton(data[KeyTopicsButton]);
@@ -1964,10 +2162,15 @@ async function hideRightSidebar() {
       "hide-sidebar",
       `${selectors.rightSidebar} {
         visibility: hidden;
-        width: 0;
+        width: 0 !important;
+        min-width: 0 !important;
+        max-width: 0 !important;
+        flex-basis: 0 !important;
         margin: 0;
         padding: 0;
-        z-index: 1;
+        overflow: hidden;
+        pointer-events: none;
+        z-index: 0;
       }`
     );
   }
@@ -1987,6 +2190,15 @@ function updateLeftSidebarPositioning() {
         ${selectors.leftSidebar} {
           position: fixed;
           left: 0;
+          pointer-events: none;
+        }
+        ${selectors.leftSidebarLinks} > *,
+        ${selectors.accountSwitcherButton},
+        ${selectors.tweetButton},
+        ${selectors.leftSidebar} a,
+        ${selectors.leftSidebar} button,
+        ${selectors.leftSidebar} [role="button"] {
+          pointer-events: auto;
         }
       }
       /* Add padding equal to navigation size when between 1000px-1265px */
@@ -2129,6 +2341,7 @@ const dynamicFeatures = {
       changeWriterMode(data[KeyWriterMode]);
     } else {
       changeTimelineTabs(data[KeyRemoveTimelineTabs], data[KeyWriterMode]);
+      changeTimelineComposer(data[KeyHideTimelineComposer], data[KeyWriterMode]);
       changeTrendsHomeTimeline(data[KeyTrendsHomeTimeline], data[KeyWriterMode]);
       changeFollowingTimeline(data[KeyFollowingTimeline]);
     }
@@ -2136,7 +2349,15 @@ const dynamicFeatures = {
 };
 
 const runDynamicFeatures = throttle(async () => {
-  const data = await getStorage([KeyWriterMode, KeyFollowingTimeline, KeyTrendsHomeTimeline, KeyRemoveTimelineTabs, KeyHideGrokDrawer, KeyNavigationButtonsLabels]);
+  const data = await getStorage([
+    KeyWriterMode,
+    KeyFollowingTimeline,
+    KeyTrendsHomeTimeline,
+    KeyRemoveTimelineTabs,
+    KeyHideTimelineComposer,
+    KeyHideGrokDrawer,
+    KeyNavigationButtonsLabels,
+  ]);
 
   if (data) {
     dynamicFeatures.general();
@@ -2437,7 +2658,8 @@ chrome.storage.onChanged.addListener(async (changes) => {
   const status = await getStorage(KeyExtensionStatus);
   if (status === "off") return;
 
-  const newData = constructNewData(changes);
+  const currentData = await getStorage(allSettingsKeys);
+  const newData = { ...currentData, ...constructNewData(changes) };
   applyStaticFeatures(newData);
 });
 
